@@ -2,7 +2,7 @@ name: Update ipo price for latest closed ipo company
 
 on:
   schedule:
-    - cron: "0 0 * */3 *" # run every 3 days
+    - cron: "0 0 */3 * *" # run every 3 days
   workflow_dispatch:
 
 jobs:
