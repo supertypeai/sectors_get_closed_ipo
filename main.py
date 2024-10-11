@@ -11,6 +11,20 @@ import urllib.request
 from bs4 import BeautifulSoup
 import translators as ts
 
+import logging
+from imp import reload
+
+def initiate_logging(LOG_FILENAME):
+    reload(logging)
+
+    formatLOG = '%(asctime)s - %(levelname)s: %(message)s'
+    logging.basicConfig(filename=LOG_FILENAME,level=logging.INFO, format=formatLOG)
+    logging.info('Program started')
+
+
+LOG_FILENAME = 'scraper.log'
+initiate_logging(LOG_FILENAME)
+
 PROXY = os.getenv("PROXY")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
@@ -120,4 +134,5 @@ try:
 
 except Exception as e:
     print(f"An exception occurred: {str(e)}")
-    
+
+logging.info(f"Finish scrape closed ipo data")
