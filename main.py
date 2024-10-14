@@ -135,7 +135,7 @@ if __name__ == '__main__':
                 logging.info(f"Error updating data: {str(e)}")
 
     except Exception as e:
-        print(f"An exception occurred: {str(e)}")
         logging.info(f"An exception occurred: {str(e)}")
+        raise Exception(f"An exception occurred: {str(e)}")
 
     logging.info(f"Finish scrape {len(update_data['ipo_price'])} closed ipo data")
