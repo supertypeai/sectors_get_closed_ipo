@@ -27,6 +27,7 @@ def extract_company_info(new_url):
             html_detail = response.read()
         soup_detail = BeautifulSoup(html_detail, 'html.parser')
         company_info_divs = soup_detail.find("div", class_="panel-body panel-scroll")
+        ipo_detail_divs = soup_detail.find("div", class_="list-group")
 
         data = {}
         current_key = None
@@ -44,9 +45,35 @@ def extract_company_info(new_url):
                     current_value.append(br_text)
                 else:
                     current_value.append(element.text)
-
+        
         if current_key is not None:
             data[current_key] = ', '.join(current_value)
+                    
+        for element in ipo_detail_divs.find_all(['h5', 'p']):
+            if element.name == "h5":
+                    current_key = element.text
+            if element.name == "p":
+                if current_key == "Book Building": 
+                    if "IDR" in element.text:
+                        data["book_building_lower_bound"] = int(element.text.split(" - ")[0].split("IDR\xa0")[1].replace(",","").replace(".",""))
+                        data["book_building_upper_bound"] = int(element.text.split(" - ")[1].split("IDR\xa0")[1].replace(",","").replace(".",""))
+                    else:
+                        data["book_building_start_date"] = datetime.strptime(element.text.split(" - ")[0], "%d %b %Y").strftime("%Y-%m-%d")
+                        data["book_building_end_date"] = datetime.strptime(element.text.split(" - ")[1], "%d %b %Y").strftime("%Y-%m-%d")
+                if current_key == "Offering":
+                    if "IDR" in element.text:
+                        data["offering_price"] = int(element.text.split("IDR\xa0")[1].replace(",","").replace(".",""))
+                    else:
+                        data["offering_start_date"] = datetime.strptime(element.text.split(" - ")[0], "%d %b %Y").strftime("%Y-%m-%d")
+                        data["offering_end_date"] = datetime.strptime(element.text.split(" - ")[1], "%d %b %Y").strftime("%Y-%m-%d")
+                        data["closing_date"] = datetime.strptime(element.text.split(" - ")[1], "%d %b %Y").strftime("%Y-%m-%d")
+                if current_key == "Distribution":
+                    data["distribution_date"] = datetime.strptime(element.text, "%d %b %Y").strftime("%Y-%m-%d")
+                if current_key == "Prospectus":
+                    data["prospectus_url"] = "https://e-ipo.co.id" + element.select("a[data-content='Download Prospectus']")[0].get("href")
+                    data["prospectus_summary_url"] = "https://e-ipo.co.id" + element.select("a[data-content='Download Summary Prospectus']")[0].get("href")
+                if current_key == "Additional Information":
+                    data["additional_info_url"] = "https://e-ipo.co.id" + element.select("a[data-content='Download Additional Information']")[0].get("href")
 
         return data
     except Exception as e:
@@ -79,6 +106,25 @@ if __name__ == '__main__':
         "ipo_price" : [],
         "underwriter": [],
         "updated_on": [],
+    }
+    
+    ipo_details = {
+        "symbol": [],
+        "shares_offered": [],
+        "percent_total_shares":[],
+        "book_building_start_date":[],
+        "book_building_end_date":[],
+        "book_building_lower_bound":[],
+        "book_building_upper_bound":[],
+        "offering_start_date":[],
+        "offering_end_date":[],
+        "offering_price":[],
+        "closing_date":[],
+        "distribution_date":[],
+        "prospectus_url":[],
+        "prospectus_summary_url":[],
+        "additional_info_url":[],
+        "updated_at": []
     }
 
     try:
@@ -116,6 +162,24 @@ if __name__ == '__main__':
                     update_data["underwriter"].append(company_info['Underwriter(s)'])
                     now = datetime.now()
                     update_data["updated_on"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
+                    
+                    ipo_details["symbol"].append(symbol)
+                    ipo_details["shares_offered"].append(company_info['Number of shares offered'].replace(" shares", "").replace(",", ""))
+                    ipo_details["percent_total_shares"].append(float(company_info['% of Total Shares']) / 100)
+                    ipo_details["book_building_start_date"].append(company_info["book_building_start_date"])
+                    ipo_details["book_building_end_date"].append(company_info["book_building_end_date"])
+                    ipo_details["book_building_lower_bound"].append(company_info["book_building_lower_bound"])
+                    ipo_details["book_building_upper_bound"].append(company_info["book_building_upper_bound"])
+                    ipo_details["offering_start_date"].append(company_info["offering_start_date"])
+                    ipo_details["offering_end_date"].append(company_info["offering_end_date"])
+                    ipo_details["offering_price"].append(company_info["offering_price"])
+                    ipo_details["closing_date"].append(company_info["closing_date"])
+                    ipo_details["distribution_date"].append(company_info["distribution_date"])
+                    ipo_details["prospectus_url"].append(company_info["prospectus_url"])
+                    ipo_details["prospectus_summary_url"].append(company_info["prospectus_summary_url"])
+                    ipo_details["additional_info_url"].append(company_info["additional_info_url"])
+                    ipo_details["updated_at"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
+                    print(ipo_details)
         except Exception as e:
             print(f"An exception when retrieve data: {str(e)}")
             logging.info(f"An exception when retrieve data: {str(e)}")
@@ -128,11 +192,39 @@ if __name__ == '__main__':
                     'underwriter': underwriter,
                     'updated_on': updated_on
                     }).eq('symbol', symbol).execute()
-                print("Symbol updated successfully for: ", symbol)
-                logging.info(f"Symbol updated successfully for: {symbol}")
+                print("Company profile updated successfully for: ", symbol)
+                logging.info(f"Company profile updated successfully for: {symbol}")
+                
             except Exception as e:
                 print(f"Error updating data: {str(e)}")
                 logging.info(f"Error updating data: {str(e)}")
+        
+        for symbol, shares_offered, percent_total_shares, book_building_start_date, book_building_end_date, book_building_lower_bound, book_building_upper_bound, offering_start_date, offering_end_date, offering_price, closing_date, distribution_date, prospectus_url, prospectus_summary_url, additional_info_url, updated_at in zip(ipo_details["symbol"], ipo_details["shares_offered"], ipo_details["percent_total_shares"], ipo_details["book_building_start_date"], ipo_details["book_building_end_date"], ipo_details["book_building_lower_bound"], ipo_details["book_building_upper_bound"], ipo_details["offering_start_date"], ipo_details["offering_end_date"], ipo_details["offering_price"], ipo_details["closing_date"], ipo_details["distribution_date"], ipo_details["prospectus_url"], ipo_details["prospectus_summary_url"], ipo_details["additional_info_url"], ipo_details["updated_at"]):
+            try:
+                supabase.table('idx_ipo_details').upsert({
+                    'symbol': symbol,
+                    'shares_offered': shares_offered,
+                    'percent_total_shares': percent_total_shares,
+                    'book_building_start_date': book_building_start_date,
+                    'book_building_end_date': book_building_end_date,
+                    'book_building_lower_bound': book_building_lower_bound,
+                    'book_building_upper_bound': book_building_upper_bound,
+                    'offering_start_date': offering_start_date,
+                    'offering_end_date': offering_end_date,
+                    'offering_price': offering_price,
+                    'closing_date': closing_date,
+                    'distribution_date': distribution_date,
+                    'prospectus_url': prospectus_url,
+                    'prospectus_summary_url': prospectus_summary_url,
+                    'additional_info_url': additional_info_url,
+                    'updated_at': updated_at
+                }).execute()
+                print("IPO detail updated successfully for: ", symbol)
+                logging.info(f"IPO detail updated successfully for: {symbol}")
+            except Exception as e:
+                print(f"Error updating data: {e}")
+                logging.info(f"Error updating data: {e}")
+            
 
     except Exception as e:
         logging.info(f"An exception occurred: {str(e)}")
