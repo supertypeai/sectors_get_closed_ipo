@@ -71,7 +71,6 @@ def extract_company_info(new_url):
                     data["distribution_date"] = datetime.strptime(element.text, "%d %b %Y").strftime("%Y-%m-%d")
                 if current_key == "Prospectus":
                     data["prospectus_url"] = "https://e-ipo.co.id" + element.select("a[data-content='Download Prospectus']")[0].get("href")
-                    data["prospectus_summary_url"] = "https://e-ipo.co.id" + element.select("a[data-content='Download Summary Prospectus']")[0].get("href")
                 if current_key == "Additional Information":
                     data["additional_info_url"] = "https://e-ipo.co.id" + element.select("a[data-content='Download Additional Information']")[0].get("href")
 
@@ -110,6 +109,7 @@ if __name__ == '__main__':
     
     ipo_details = {
         "symbol": [],
+        "company_name": [],
         "shares_offered": [],
         "percent_total_shares":[],
         "book_building_start_date":[],
@@ -122,7 +122,6 @@ if __name__ == '__main__':
         "closing_date":[],
         "distribution_date":[],
         "prospectus_url":[],
-        "prospectus_summary_url":[],
         "additional_info_url":[],
         "updated_at": []
     }
@@ -146,14 +145,14 @@ if __name__ == '__main__':
             result["href"].append(button.get("href"))
         
         try:
-            company_ipo_price_null = supabase.table('idx_company_profile').select('symbol').filter('ipo_price', 'is', 'null').execute().data
-            company_symbols_null_ipo = [d['symbol'] for d in company_ipo_price_null]
+            company_ipo_price_null = supabase.table('idx_company_profile_2024_11_11').select('symbol, company_name').filter('ipo_price', 'is', 'null').execute().data
+            company_symbols_null_ipo = {d['symbol']: d['company_name'] for d in company_ipo_price_null}
         except Exception as e:
             print(f"An exception when supabase: {str(e)}")
             
         try:
             for symbol in result["symbol"]:
-                if symbol in company_symbols_null_ipo:
+                if symbol in company_symbols_null_ipo.keys():
                     idx = result["symbol"].index(symbol)
                     new_url = f"https://e-ipo.co.id{result['href'][idx]}"
                     company_info = extract_company_info(new_url)
@@ -164,6 +163,7 @@ if __name__ == '__main__':
                     update_data["updated_on"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
                     
                     ipo_details["symbol"].append(symbol)
+                    ipo_details["company_name"].append(company_symbols_null_ipo[symbol])
                     ipo_details["shares_offered"].append(company_info['Number of shares offered'].replace(" shares", "").replace(",", ""))
                     ipo_details["percent_total_shares"].append(float(company_info['% of Total Shares']) / 100)
                     ipo_details["book_building_start_date"].append(company_info["book_building_start_date"])
@@ -176,7 +176,6 @@ if __name__ == '__main__':
                     ipo_details["closing_date"].append(company_info["closing_date"])
                     ipo_details["distribution_date"].append(company_info["distribution_date"])
                     ipo_details["prospectus_url"].append(company_info["prospectus_url"])
-                    ipo_details["prospectus_summary_url"].append(company_info["prospectus_summary_url"])
                     ipo_details["additional_info_url"].append(company_info["additional_info_url"])
                     ipo_details["updated_at"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
                     print(ipo_details)
@@ -199,10 +198,11 @@ if __name__ == '__main__':
                 print(f"Error updating data: {str(e)}")
                 logging.info(f"Error updating data: {str(e)}")
         
-        for symbol, shares_offered, percent_total_shares, book_building_start_date, book_building_end_date, book_building_lower_bound, book_building_upper_bound, offering_start_date, offering_end_date, offering_price, closing_date, distribution_date, prospectus_url, prospectus_summary_url, additional_info_url, updated_at in zip(ipo_details["symbol"], ipo_details["shares_offered"], ipo_details["percent_total_shares"], ipo_details["book_building_start_date"], ipo_details["book_building_end_date"], ipo_details["book_building_lower_bound"], ipo_details["book_building_upper_bound"], ipo_details["offering_start_date"], ipo_details["offering_end_date"], ipo_details["offering_price"], ipo_details["closing_date"], ipo_details["distribution_date"], ipo_details["prospectus_url"], ipo_details["prospectus_summary_url"], ipo_details["additional_info_url"], ipo_details["updated_at"]):
+        for symbol, company_name, shares_offered, percent_total_shares, book_building_start_date, book_building_end_date, book_building_lower_bound, book_building_upper_bound, offering_start_date, offering_end_date, offering_price, closing_date, distribution_date, prospectus_url, additional_info_url, updated_at in zip(ipo_details["symbol"], ipo_details['company_name'], ipo_details["shares_offered"], ipo_details["percent_total_shares"], ipo_details["book_building_start_date"], ipo_details["book_building_end_date"], ipo_details["book_building_lower_bound"], ipo_details["book_building_upper_bound"], ipo_details["offering_start_date"], ipo_details["offering_end_date"], ipo_details["offering_price"], ipo_details["closing_date"], ipo_details["distribution_date"], ipo_details["prospectus_url"], ipo_details["additional_info_url"], ipo_details["updated_at"]):
             try:
                 supabase.table('idx_ipo_details').upsert({
                     'symbol': symbol,
+                    'company_name': company_name,
                     'shares_offered': shares_offered,
                     'percent_total_shares': percent_total_shares,
                     'book_building_start_date': book_building_start_date,
@@ -215,7 +215,6 @@ if __name__ == '__main__':
                     'closing_date': closing_date,
                     'distribution_date': distribution_date,
                     'prospectus_url': prospectus_url,
-                    'prospectus_summary_url': prospectus_summary_url,
                     'additional_info_url': additional_info_url,
                     'updated_at': updated_at
                 }).execute()
