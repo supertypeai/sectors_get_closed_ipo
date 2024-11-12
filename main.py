@@ -66,7 +66,6 @@ def extract_company_info(new_url):
                     else:
                         data["offering_start_date"] = datetime.strptime(element.text.split(" - ")[0], "%d %b %Y").strftime("%Y-%m-%d")
                         data["offering_end_date"] = datetime.strptime(element.text.split(" - ")[1], "%d %b %Y").strftime("%Y-%m-%d")
-                        data["closing_date"] = datetime.strptime(element.text.split(" - ")[1], "%d %b %Y").strftime("%Y-%m-%d")
                 if current_key == "Distribution":
                     data["distribution_date"] = datetime.strptime(element.text, "%d %b %Y").strftime("%Y-%m-%d")
                 if current_key == "Prospectus":
@@ -119,7 +118,6 @@ if __name__ == '__main__':
         "offering_start_date":[],
         "offering_end_date":[],
         "offering_price":[],
-        "closing_date":[],
         "distribution_date":[],
         "prospectus_url":[],
         "additional_info_url":[],
@@ -173,7 +171,6 @@ if __name__ == '__main__':
                     ipo_details["offering_start_date"].append(company_info["offering_start_date"])
                     ipo_details["offering_end_date"].append(company_info["offering_end_date"])
                     ipo_details["offering_price"].append(company_info["offering_price"])
-                    ipo_details["closing_date"].append(company_info["closing_date"])
                     ipo_details["distribution_date"].append(company_info["distribution_date"])
                     ipo_details["prospectus_url"].append(company_info["prospectus_url"])
                     ipo_details["additional_info_url"].append(company_info["additional_info_url"])
@@ -198,7 +195,7 @@ if __name__ == '__main__':
                 print(f"Error updating data: {str(e)}")
                 logging.info(f"Error updating data: {str(e)}")
         
-        for symbol, company_name, shares_offered, percent_total_shares, book_building_start_date, book_building_end_date, book_building_lower_bound, book_building_upper_bound, offering_start_date, offering_end_date, offering_price, closing_date, distribution_date, prospectus_url, additional_info_url, updated_at in zip(ipo_details["symbol"], ipo_details['company_name'], ipo_details["shares_offered"], ipo_details["percent_total_shares"], ipo_details["book_building_start_date"], ipo_details["book_building_end_date"], ipo_details["book_building_lower_bound"], ipo_details["book_building_upper_bound"], ipo_details["offering_start_date"], ipo_details["offering_end_date"], ipo_details["offering_price"], ipo_details["closing_date"], ipo_details["distribution_date"], ipo_details["prospectus_url"], ipo_details["additional_info_url"], ipo_details["updated_at"]):
+        for symbol, company_name, shares_offered, percent_total_shares, book_building_start_date, book_building_end_date, book_building_lower_bound, book_building_upper_bound, offering_start_date, offering_end_date, offering_price, distribution_date, prospectus_url, additional_info_url, updated_at in zip(ipo_details["symbol"], ipo_details['company_name'], ipo_details["shares_offered"], ipo_details["percent_total_shares"], ipo_details["book_building_start_date"], ipo_details["book_building_end_date"], ipo_details["book_building_lower_bound"], ipo_details["book_building_upper_bound"], ipo_details["offering_start_date"], ipo_details["offering_end_date"], ipo_details["offering_price"], ipo_details["distribution_date"], ipo_details["prospectus_url"], ipo_details["additional_info_url"], ipo_details["updated_at"]):
             try:
                 supabase.table('idx_ipo_details').upsert({
                     'symbol': symbol,
@@ -212,7 +209,6 @@ if __name__ == '__main__':
                     'offering_start_date': offering_start_date,
                     'offering_end_date': offering_end_date,
                     'offering_price': offering_price,
-                    'closing_date': closing_date,
                     'distribution_date': distribution_date,
                     'prospectus_url': prospectus_url,
                     'additional_info_url': additional_info_url,
