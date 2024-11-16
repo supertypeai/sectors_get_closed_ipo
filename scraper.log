@@ -23,3 +23,6 @@
 2024-11-13 01:25:08,254 - INFO: Program started
 2024-11-13 01:25:12,609 - INFO: An exception when retrieve data: name 'company_symbols_null_ipo' is not defined
 2024-11-13 01:25:12,609 - INFO: Finish scrape 0 closed ipo data
+2024-11-16 01:35:33,269 - INFO: Program started
+2024-11-16 01:35:38,607 - INFO: An exception when retrieve data: name 'company_symbols_null_ipo' is not defined
+2024-11-16 01:35:38,607 - INFO: Finish scrape 0 closed ipo data
