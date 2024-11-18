@@ -26,3 +26,11 @@
 2024-11-16 01:35:33,269 - INFO: Program started
 2024-11-16 01:35:38,607 - INFO: An exception when retrieve data: name 'company_symbols_null_ipo' is not defined
 2024-11-16 01:35:38,607 - INFO: Finish scrape 0 closed ipo data
+2024-11-18 03:31:59,961 - INFO: Program started
+2024-11-18 03:32:22,963 - INFO: Company profile updated successfully for: DAAZ.JK
+2024-11-18 03:32:23,742 - INFO: Company profile updated successfully for: NAIK.JK
+2024-11-18 03:32:24,011 - INFO: Company profile updated successfully for: BOAT.JK
+2024-11-18 03:32:24,759 - INFO: IPO detail updated successfully for: DAAZ.JK
+2024-11-18 03:32:25,524 - INFO: IPO detail updated successfully for: NAIK.JK
+2024-11-18 03:32:25,813 - INFO: IPO detail updated successfully for: BOAT.JK
+2024-11-18 03:32:25,813 - INFO: Finish scrape 3 closed ipo data
