@@ -143,7 +143,7 @@ if __name__ == '__main__':
             result["href"].append(button.get("href"))
         
         try:
-            company_ipo_price_null = supabase.table('idx_company_profile_2024_11_11').select('symbol, company_name').filter('ipo_price', 'is', 'null').execute().data
+            company_ipo_price_null = supabase.table('idx_company_profile').select('symbol, company_name').filter('ipo_price', 'is', 'null').execute().data
             company_symbols_null_ipo = {d['symbol']: d['company_name'] for d in company_ipo_price_null}
         except Exception as e:
             print(f"An exception when supabase: {str(e)}")
