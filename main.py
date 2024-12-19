@@ -32,6 +32,8 @@ def extract_company_info(new_url):
         data = {}
         current_key = None
         current_value = []
+        
+        data['company_name'] = soup_detail.find("h1", class_="panel-title").text
 
         for element in company_info_divs.find_all(['h5', 'p']):
             if element.name == 'h5':
@@ -143,6 +145,8 @@ if __name__ == '__main__':
             result["href"].append(button.get("href"))
         
         try:
+            company_ipo_details_symbol = supabase.table('idx_ipo_details').select('symbol').execute().data
+            company_ipo_details_symbol = [d['symbol'] for d in company_ipo_details_symbol]
             company_ipo_price_null = supabase.table('idx_company_profile').select('symbol, company_name').filter('ipo_price', 'is', 'null').execute().data
             company_symbols_null_ipo = {d['symbol']: d['company_name'] for d in company_ipo_price_null}
         except Exception as e:
@@ -150,27 +154,32 @@ if __name__ == '__main__':
             
         try:
             for symbol in result["symbol"]:
-                if symbol in company_symbols_null_ipo.keys():
-                    idx = result["symbol"].index(symbol)
-                    new_url = f"https://e-ipo.co.id{result['href'][idx]}"
+                index = result["symbol"].index(symbol)
+                now = datetime.now()
+                
+                if symbol not in company_ipo_details_symbol or symbol in company_symbols_null_ipo.keys():
+                    print("Retrieving data for: ", symbol)
+                    new_url = f"https://e-ipo.co.id{result['href'][index]}"
                     company_info = extract_company_info(new_url)
+                
+                if symbol in company_symbols_null_ipo.keys():
                     update_data["symbol"].append(symbol)
-                    update_data["ipo_price"].append(result["ipo_price"][idx])
+                    update_data["ipo_price"].append(company_info['offering_price'])
                     update_data["underwriter"].append(company_info['Underwriter(s)'])
-                    now = datetime.now()
                     update_data["updated_on"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
-                    
+                
+                if symbol not in company_ipo_details_symbol:
                     ipo_details["symbol"].append(symbol)
-                    ipo_details["company_name"].append(company_symbols_null_ipo[symbol])
+                    ipo_details["company_name"].append(company_info['company_name'])
                     ipo_details["shares_offered"].append(company_info['Number of shares offered'].replace(" shares", "").replace(",", ""))
                     ipo_details["percent_total_shares"].append(float(company_info['% of Total Shares']) / 100)
                     ipo_details["book_building_start_date"].append(company_info["book_building_start_date"])
                     ipo_details["book_building_end_date"].append(company_info["book_building_end_date"])
-                    ipo_details["book_building_lower_bound"].append(company_info["book_building_lower_bound"])
-                    ipo_details["book_building_upper_bound"].append(company_info["book_building_upper_bound"])
+                    ipo_details["book_building_lower_bound"].append(int(company_info["book_building_lower_bound"]))
+                    ipo_details["book_building_upper_bound"].append(int(company_info["book_building_upper_bound"]))
                     ipo_details["offering_start_date"].append(company_info["offering_start_date"])
                     ipo_details["offering_end_date"].append(company_info["offering_end_date"])
-                    ipo_details["offering_price"].append(company_info["offering_price"])
+                    ipo_details["offering_price"].append(int(company_info["offering_price"]))
                     ipo_details["distribution_date"].append(company_info["distribution_date"])
                     ipo_details["prospectus_url"].append(company_info["prospectus_url"])
                     ipo_details["additional_info_url"].append(company_info["additional_info_url"])
