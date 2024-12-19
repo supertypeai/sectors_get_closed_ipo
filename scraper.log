@@ -64,3 +64,5 @@
 2024-12-19 01:38:28,026 - INFO: Error updating data: {'code': '22P02', 'details': None, 'hint': None, 'message': 'invalid input syntax for type real: "5,550"'}
 2024-12-19 01:38:28,725 - INFO: IPO detail updated successfully for: AADI.JK
 2024-12-19 01:38:28,725 - INFO: Finish scrape 1 closed ipo data
+2024-12-19 19:01:19,155 - INFO: Program started
+2024-12-19 19:01:23,356 - INFO: Finish scrape 0 closed ipo data
