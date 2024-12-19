@@ -26,3 +26,41 @@
 2024-11-16 01:35:33,269 - INFO: Program started
 2024-11-16 01:35:38,607 - INFO: An exception when retrieve data: name 'company_symbols_null_ipo' is not defined
 2024-11-16 01:35:38,607 - INFO: Finish scrape 0 closed ipo data
+2024-11-18 03:31:59,961 - INFO: Program started
+2024-11-18 03:32:22,963 - INFO: Company profile updated successfully for: DAAZ.JK
+2024-11-18 03:32:23,742 - INFO: Company profile updated successfully for: NAIK.JK
+2024-11-18 03:32:24,011 - INFO: Company profile updated successfully for: BOAT.JK
+2024-11-18 03:32:24,759 - INFO: IPO detail updated successfully for: DAAZ.JK
+2024-11-18 03:32:25,524 - INFO: IPO detail updated successfully for: NAIK.JK
+2024-11-18 03:32:25,813 - INFO: IPO detail updated successfully for: BOAT.JK
+2024-11-18 03:32:25,813 - INFO: Finish scrape 3 closed ipo data
+2024-11-19 01:38:01,153 - INFO: Program started
+2024-11-19 01:38:06,665 - INFO: Finish scrape 0 closed ipo data
+2024-11-22 01:37:50,539 - INFO: Program started
+2024-11-22 01:37:55,290 - INFO: Finish scrape 0 closed ipo data
+2024-11-25 01:39:34,087 - INFO: Program started
+2024-11-25 01:39:37,161 - INFO: Finish scrape 0 closed ipo data
+2024-11-28 01:39:28,246 - INFO: Program started
+2024-11-28 01:39:34,208 - INFO: Finish scrape 0 closed ipo data
+2024-12-01 01:53:09,254 - INFO: Program started
+2024-12-01 01:53:17,116 - INFO: Finish scrape 0 closed ipo data
+2024-12-04 01:41:46,286 - INFO: Program started
+2024-12-04 01:41:54,802 - INFO: Finish scrape 0 closed ipo data
+2024-12-07 01:39:27,768 - INFO: Program started
+2024-12-07 01:39:32,956 - INFO: Finish scrape 0 closed ipo data
+2024-12-09 06:29:07,894 - INFO: Program started
+2024-12-09 06:29:11,429 - INFO: Finish scrape 0 closed ipo data
+2024-12-10 01:42:53,792 - INFO: Program started
+2024-12-10 01:42:57,579 - INFO: Finish scrape 0 closed ipo data
+2024-12-13 01:42:27,321 - INFO: Program started
+2024-12-13 01:42:33,069 - INFO: Finish scrape 0 closed ipo data
+2024-12-16 01:44:37,397 - INFO: Program started
+2024-12-16 01:44:41,344 - INFO: Finish scrape 0 closed ipo data
+2024-12-18 07:08:40,814 - INFO: Program started
+2024-12-18 07:08:45,670 - INFO: Error updating data: {'code': '22P02', 'details': None, 'hint': None, 'message': 'invalid input syntax for type real: "5,550"'}
+2024-12-18 07:08:46,378 - INFO: IPO detail updated successfully for: AADI.JK
+2024-12-18 07:08:46,379 - INFO: Finish scrape 1 closed ipo data
+2024-12-19 01:38:23,167 - INFO: Program started
+2024-12-19 01:38:28,026 - INFO: Error updating data: {'code': '22P02', 'details': None, 'hint': None, 'message': 'invalid input syntax for type real: "5,550"'}
+2024-12-19 01:38:28,725 - INFO: IPO detail updated successfully for: AADI.JK
+2024-12-19 01:38:28,725 - INFO: Finish scrape 1 closed ipo data
