@@ -70,6 +70,8 @@ def extract_company_info(new_url):
                         data["offering_end_date"] = datetime.strptime(element.text.split(" - ")[1], "%d %b %Y").strftime("%Y-%m-%d")
                 if current_key == "Distribution":
                     data["distribution_date"] = datetime.strptime(element.text, "%d %b %Y").strftime("%Y-%m-%d")
+                if current_key == "Listing Date":
+                    data["listing_date"] = datetime.strptime(element.text, "%d %b %Y").strftime("%Y-%m-%d")
                 if current_key == "Prospectus":
                     data["prospectus_url"] = "https://e-ipo.co.id" + element.select("a[data-content='Download Prospectus']")[0].get("href")
                 if current_key == "Additional Information":
@@ -121,28 +123,33 @@ if __name__ == '__main__':
         "offering_end_date":[],
         "offering_price":[],
         "distribution_date":[],
+        "listing_date":[],
         "prospectus_url":[],
         "additional_info_url":[],
         "updated_at": []
     }
 
     try:
-        url = f'https://e-ipo.co.id/en/ipo/index?page=1&per-page=&query=&sort=-updated_at&status_id=5&view=list'
-        with urllib.request.urlopen(url) as response:
-            html = response.read()
-        soup = BeautifulSoup(html, 'html.parser')
-        names = []
-        names_class = soup.find_all(class_="margin-left10 colorwhite")
-        for name in names_class:
-            company_name, symbol = name.get_text().replace(" Sharia", "").replace(")", "").split(' (')
-            result["symbol"].append(symbol.replace("Closed", "").replace("Book Building","") + ".JK")
-        notopmargins = soup.find_all("p", class_="notopmargin")
-        nobottommargins = soup.find_all(class_="nobottommargin")
-        for top, bottom in zip(notopmargins, nobottommargins):
-            if bottom.get_text() == "Final Price": result["ipo_price"].append(top.get_text().replace("IDR\xa0", ""))
-        buttons = soup.find_all(class_="button button-3d button-small notopmargin button-rounded button-dirtygreen")
-        for button in buttons:
-            result["href"].append(button.get("href"))
+        urls = [
+            f'https://e-ipo.co.id/en/ipo/index?page=1&per-page=&query=&sort=-updated_at&status_id=5&view=list',
+            f'https://e-ipo.co.id/en/ipo/index?page=1&per-page=&query=&sort=-updated_at&status_id=3&view=list'
+        ]
+        for url in urls:
+            with urllib.request.urlopen(url) as response:
+                html = response.read()
+            soup = BeautifulSoup(html, 'html.parser')
+            names = []
+            names_class = soup.find_all(class_="margin-left10 colorwhite")
+            for name in names_class:
+                company_name, symbol = name.get_text().replace(" Sharia", "").replace(")", "").split(' (')
+                result["symbol"].append(symbol.replace("Closed", "").replace("Offering","").replace("Book Building","") + ".JK")
+            notopmargins = soup.find_all("p", class_="notopmargin")
+            nobottommargins = soup.find_all(class_="nobottommargin")
+            for top, bottom in zip(notopmargins, nobottommargins):
+                if bottom.get_text() == "Final Price": result["ipo_price"].append(top.get_text().replace("IDR\xa0", ""))
+            buttons = soup.find_all(class_="button button-3d button-small notopmargin button-rounded button-dirtygreen")
+            for button in buttons:
+                result["href"].append(button.get("href"))
         
         try:
             company_ipo_details_symbol = supabase.table('idx_ipo_details').select('symbol').execute().data
@@ -157,7 +164,7 @@ if __name__ == '__main__':
                 index = result["symbol"].index(symbol)
                 now = datetime.now()
                 
-                if symbol not in company_ipo_details_symbol or symbol in company_symbols_null_ipo.keys():
+                if symbol not in company_ipo_details_symbol or symbol in company_symbols_null_ipo.keys() or 1==1:
                     print("Retrieving data for: ", symbol)
                     new_url = f"https://e-ipo.co.id{result['href'][index]}"
                     company_info = extract_company_info(new_url)
@@ -168,7 +175,7 @@ if __name__ == '__main__':
                     update_data["underwriter"].append(company_info['Underwriter(s)'])
                     update_data["updated_on"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
                 
-                if symbol not in company_ipo_details_symbol:
+                if symbol not in company_ipo_details_symbol or 1==1:
                     ipo_details["symbol"].append(symbol)
                     ipo_details["company_name"].append(company_info['company_name'])
                     ipo_details["shares_offered"].append(company_info['Number of shares offered'].replace(" shares", "").replace(",", ""))
@@ -181,6 +188,7 @@ if __name__ == '__main__':
                     ipo_details["offering_end_date"].append(company_info["offering_end_date"])
                     ipo_details["offering_price"].append(int(company_info["offering_price"]))
                     ipo_details["distribution_date"].append(company_info["distribution_date"])
+                    ipo_details["listing_date"].append(company_info["listing_date"])
                     ipo_details["prospectus_url"].append(company_info["prospectus_url"])
                     ipo_details["additional_info_url"].append(company_info["additional_info_url"])
                     ipo_details["updated_at"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
@@ -204,7 +212,7 @@ if __name__ == '__main__':
                 print(f"Error updating data: {str(e)}")
                 logging.info(f"Error updating data: {str(e)}")
         
-        for symbol, company_name, shares_offered, percent_total_shares, book_building_start_date, book_building_end_date, book_building_lower_bound, book_building_upper_bound, offering_start_date, offering_end_date, offering_price, distribution_date, prospectus_url, additional_info_url, updated_at in zip(ipo_details["symbol"], ipo_details['company_name'], ipo_details["shares_offered"], ipo_details["percent_total_shares"], ipo_details["book_building_start_date"], ipo_details["book_building_end_date"], ipo_details["book_building_lower_bound"], ipo_details["book_building_upper_bound"], ipo_details["offering_start_date"], ipo_details["offering_end_date"], ipo_details["offering_price"], ipo_details["distribution_date"], ipo_details["prospectus_url"], ipo_details["additional_info_url"], ipo_details["updated_at"]):
+        for symbol, company_name, shares_offered, percent_total_shares, book_building_start_date, book_building_end_date, book_building_lower_bound, book_building_upper_bound, offering_start_date, offering_end_date, offering_price, distribution_date, listing_date, prospectus_url, additional_info_url, updated_at in zip(ipo_details["symbol"], ipo_details['company_name'], ipo_details["shares_offered"], ipo_details["percent_total_shares"], ipo_details["book_building_start_date"], ipo_details["book_building_end_date"], ipo_details["book_building_lower_bound"], ipo_details["book_building_upper_bound"], ipo_details["offering_start_date"], ipo_details["offering_end_date"], ipo_details["offering_price"], ipo_details["distribution_date"], ipo_details["listing_date"], ipo_details["prospectus_url"], ipo_details["additional_info_url"], ipo_details["updated_at"]):
             try:
                 supabase.table('idx_ipo_details').upsert({
                     'symbol': symbol,
@@ -219,6 +227,7 @@ if __name__ == '__main__':
                     'offering_end_date': offering_end_date,
                     'offering_price': offering_price,
                     'distribution_date': distribution_date,
+                    'listing_date': listing_date,
                     'prospectus_url': prospectus_url,
                     'additional_info_url': additional_info_url,
                     'updated_at': updated_at
