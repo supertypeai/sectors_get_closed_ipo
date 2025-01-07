@@ -164,7 +164,7 @@ if __name__ == '__main__':
                 index = result["symbol"].index(symbol)
                 now = datetime.now()
                 
-                if symbol not in company_ipo_details_symbol or symbol in company_symbols_null_ipo.keys() or 1==1:
+                if symbol not in company_ipo_details_symbol or symbol in company_symbols_null_ipo.keys():
                     print("Retrieving data for: ", symbol)
                     new_url = f"https://e-ipo.co.id{result['href'][index]}"
                     company_info = extract_company_info(new_url)
@@ -175,7 +175,7 @@ if __name__ == '__main__':
                     update_data["underwriter"].append(company_info['Underwriter(s)'])
                     update_data["updated_on"].append(now.strftime("%Y-%m-%d %H:%M:%S"))
                 
-                if symbol not in company_ipo_details_symbol or 1==1:
+                if symbol not in company_ipo_details_symbol:
                     ipo_details["symbol"].append(symbol)
                     ipo_details["company_name"].append(company_info['company_name'])
                     ipo_details["shares_offered"].append(company_info['Number of shares offered'].replace(" shares", "").replace(",", ""))
