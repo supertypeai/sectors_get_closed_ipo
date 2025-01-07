@@ -64,3 +64,18 @@
 2024-12-19 01:38:28,026 - INFO: Error updating data: {'code': '22P02', 'details': None, 'hint': None, 'message': 'invalid input syntax for type real: "5,550"'}
 2024-12-19 01:38:28,725 - INFO: IPO detail updated successfully for: AADI.JK
 2024-12-19 01:38:28,725 - INFO: Finish scrape 1 closed ipo data
+2024-12-19 19:01:19,155 - INFO: Program started
+2024-12-19 19:01:23,356 - INFO: Finish scrape 0 closed ipo data
+2024-12-22 19:01:14,895 - INFO: Program started
+2024-12-22 19:01:47,912 - INFO: Company profile updated successfully for: MDIY.JK
+2024-12-22 19:01:47,912 - INFO: Finish scrape 1 closed ipo data
+2024-12-25 19:01:14,667 - INFO: Program started
+2024-12-25 19:01:20,541 - INFO: Finish scrape 0 closed ipo data
+2024-12-28 19:01:22,968 - INFO: Program started
+2024-12-28 19:01:28,830 - INFO: Finish scrape 0 closed ipo data
+2024-12-31 19:01:08,328 - INFO: Program started
+2024-12-31 19:01:11,696 - INFO: Finish scrape 0 closed ipo data
+2025-01-01 19:01:02,919 - INFO: Program started
+2025-01-01 19:01:06,325 - INFO: Finish scrape 0 closed ipo data
+2025-01-04 19:01:09,663 - INFO: Program started
+2025-01-04 19:01:13,463 - INFO: Finish scrape 0 closed ipo data
