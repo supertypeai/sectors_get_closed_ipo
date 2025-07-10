@@ -233,3 +233,9 @@
 2025-07-04 19:07:14,232 - INFO: Finish scrape 0 closed ipo data
 2025-07-07 19:07:42,074 - INFO: Program started
 2025-07-07 19:07:49,103 - INFO: Finish scrape 0 closed ipo data
+2025-07-10 19:07:19,353 - INFO: Program started
+2025-07-10 19:07:36,995 - INFO: Company profile updated successfully for: CDIA.JK
+2025-07-10 19:07:37,767 - INFO: Company profile updated successfully for: COIN.JK
+2025-07-10 19:07:38,608 - INFO: Company profile updated successfully for: PSAT.JK
+2025-07-10 19:07:38,887 - INFO: Company profile updated successfully for: ASPR.JK
+2025-07-10 19:07:38,887 - INFO: Finish scrape 4 closed ipo data
