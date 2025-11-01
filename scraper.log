@@ -326,3 +326,6 @@
 2025-10-31 19:01:14,917 - INFO: Program started
 2025-10-31 19:01:23,558 - INFO: An exception when retrieve data: 'additional_info_url'
 2025-10-31 19:01:23,558 - INFO: Finish scrape 0 closed ipo data
+2025-11-01 19:01:00,006 - INFO: Program started
+2025-11-01 19:01:06,927 - INFO: An exception when retrieve data: 'additional_info_url'
+2025-11-01 19:01:06,927 - INFO: Finish scrape 0 closed ipo data
