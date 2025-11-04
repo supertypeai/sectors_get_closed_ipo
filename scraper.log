@@ -329,3 +329,6 @@
 2025-11-01 19:01:00,006 - INFO: Program started
 2025-11-01 19:01:06,927 - INFO: An exception when retrieve data: 'additional_info_url'
 2025-11-01 19:01:06,927 - INFO: Finish scrape 0 closed ipo data
+2025-11-04 19:01:17,747 - INFO: Program started
+2025-11-04 19:01:28,105 - INFO: IPO detail updated successfully for: PJHB.JK
+2025-11-04 19:01:28,105 - INFO: Finish scrape 0 closed ipo data
