@@ -495,3 +495,8 @@
 2026-06-25 20:51:08,548 - INFO: Finish scrape 0 closed ipo data
 2026-06-28 20:03:09,600 - INFO: Program started
 2026-06-28 20:03:16,575 - INFO: Finish scrape 0 closed ipo data
+2026-07-01 20:30:38,150 - INFO: Program started
+2026-07-01 20:31:02,544 - INFO: IPO detail updated successfully for: JECX.JK
+2026-07-01 20:31:02,815 - INFO: IPO detail updated successfully for: JELI.JK
+2026-07-01 20:31:03,094 - INFO: IPO detail updated successfully for: PRDL.JK
+2026-07-01 20:31:03,094 - INFO: Finish scrape 0 closed ipo data
