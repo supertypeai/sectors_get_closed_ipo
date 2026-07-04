@@ -500,3 +500,8 @@
 2026-07-01 20:31:02,815 - INFO: IPO detail updated successfully for: JELI.JK
 2026-07-01 20:31:03,094 - INFO: IPO detail updated successfully for: PRDL.JK
 2026-07-01 20:31:03,094 - INFO: Finish scrape 0 closed ipo data
+2026-07-04 20:01:26,836 - INFO: Program started
+2026-07-04 20:01:41,913 - INFO: IPO detail updated successfully for: EMMI.JK
+2026-07-04 20:01:42,180 - INFO: IPO detail updated successfully for: BACH.JK
+2026-07-04 20:01:42,913 - INFO: IPO detail updated successfully for: RANS.JK
+2026-07-04 20:01:42,913 - INFO: Finish scrape 0 closed ipo data
