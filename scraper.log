@@ -509,3 +509,9 @@
 2026-07-07 20:42:31,845 - INFO: Company profile updated successfully for: JELI.JK
 2026-07-07 20:42:32,598 - INFO: Company profile updated successfully for: JECX.JK
 2026-07-07 20:42:32,598 - INFO: Finish scrape 2 closed ipo data
+2026-07-10 20:09:44,237 - INFO: Program started
+2026-07-10 20:10:16,979 - INFO: Company profile updated successfully for: RANS.JK
+2026-07-10 20:10:17,642 - INFO: Company profile updated successfully for: PRDL.JK
+2026-07-10 20:10:17,896 - INFO: Company profile updated successfully for: BACH.JK
+2026-07-10 20:10:18,143 - INFO: Company profile updated successfully for: EMMI.JK
+2026-07-10 20:10:18,143 - INFO: Finish scrape 4 closed ipo data
