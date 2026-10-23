@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 import translators as ts
 
 import logging
-from imp import reload
+from importlib import reload
 
 def initiate_logging(LOG_FILENAME):
     reload(logging)
